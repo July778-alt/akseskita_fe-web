@@ -155,5 +155,292 @@ Example:
 
 ```text
 ┌─────────────────────────────────────────┐
-│              AD
+│              ADMIN DASHBOARD             │
+├───────────┬───────────┬─────────────────┤
+│  Reports  │  Pending  │    Resolved     │
+│    120    │    32     │       64        │
+└───────────┴───────────┴─────────────────┘
 ```
+
+---
+
+## Role-Based Interface
+
+The application provides different interfaces depending on the authenticated user's role.
+
+```text
+                         Login
+                           │
+                           ▼
+                    Authentication
+                           │
+              ┌────────────┴────────────┐
+              │                         │
+           Public                    Admin
+              │                         │
+              ▼                         ▼
+        User Dashboard            Admin Dashboard
+              │                         │
+        Own Reports               All Reports
+        Create Report             Manage Reports
+        Comments                   Categories
+        History                    Statistics
+                                      │
+                                      ▼
+                                Superadmin
+                                      │
+                              User Management
+                              Role Management
+```
+
+---
+
+## Application Structure
+
+```text
+akses_kita_fe_web/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   └── register/
+│   │
+│   ├── dashboard/
+│   │   ├── page.tsx
+│   │   ├── reports/
+│   │   └── profile/
+│   │
+│   ├── reports/
+│   │   ├── page.tsx
+│   │   ├── create/
+│   │   └── [id]/
+│   │
+│   ├── admin/
+│   │   ├── dashboard/
+│   │   ├── reports/
+│   │   ├── categories/
+│   │   └── users/
+│   │
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── components/
+│   ├── ui/
+│   ├── layout/
+│   ├── reports/
+│   ├── map/
+│   └── dashboard/
+│
+├── lib/
+│   ├── api.ts
+│   ├── auth.ts
+│   └── utils.ts
+│
+├── services/
+│   ├── auth.service.ts
+│   ├── report.service.ts
+│   ├── category.service.ts
+│   └── user.service.ts
+│
+├── types/
+│   └── index.ts
+│
+├── public/
+│
+├── .env.example
+├── next.config.ts
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+> The exact folder structure may differ depending on the current implementation.
+
+---
+
+## Requirements
+
+Make sure the following are installed:
+
+* Node.js
+* npm
+* Git
+
+The application also requires the **AksesKita Backend API** to be running.
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+cd akses_kita_fe_web
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+## Environment Variables
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+The API URL should point to the running AksesKita backend.
+
+---
+
+## Running the Development Server
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Production Build
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Run the production server:
+
+```bash
+npm start
+```
+
+---
+
+## API Integration
+
+The frontend communicates with the backend through REST API endpoints.
+
+Example:
+
+```text
+Frontend
+   │
+   │ HTTP Request
+   ▼
+AksesKita Backend
+   │
+   ▼
+PostgreSQL
+```
+
+Example API request:
+
+```ts
+const response = await api.get("/reports");
+```
+
+Authenticated requests include the user's JWT token:
+
+```http
+Authorization: Bearer <JWT_TOKEN>
+```
+
+---
+
+## Design Approach
+
+The interface focuses on a clean and accessible user experience.
+
+The frontend is designed around:
+
+* Clear navigation
+* Responsive layouts
+* Simple report submission
+* Readable report information
+* Location-based reporting
+* Role-based interfaces
+* Consistent UI components
+
+The application is intended to be usable across desktop and mobile-sized screens.
+
+---
+
+## Related Projects
+
+### AksesKita Backend
+
+REST API responsible for authentication, report management, comments, categories, dashboard statistics, and database operations.
+
+```text
+Express.js
+TypeScript
+PostgreSQL
+```
+
+### AksesKita Mobile
+
+Mobile client for submitting and monitoring accessibility reports.
+
+```text
+React Native
+Expo
+```
+
+---
+
+## Development Flow
+
+```text
+                 ┌───────────────────┐
+                 │    AksesKita Web  │
+                 │     Next.js       │
+                 └─────────┬─────────┘
+                           │
+                           │ REST API
+                           ▼
+                 ┌───────────────────┐
+                 │ AksesKita Backend │
+                 │    Express.js     │
+                 └─────────┬─────────┘
+                           │
+                           ▼
+                 ┌───────────────────┐
+                 │    PostgreSQL     │
+                 └───────────────────┘
+```
+
+---
+
+## Project Goal
+
+AksesKita aims to provide a platform for documenting accessibility problems in public spaces.
+
+Through the web application, users can report issues while administrators can review reports, manage their status, and monitor submitted accessibility problems.
+
+---
+
+## Author
+
+**Radit**
+
+RPL Student & Frontend Developer
+
+---
+
+## License
+
+This project was created as a school project and learning portfolio.
