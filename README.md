@@ -11,11 +11,7 @@ Aplikasi web modern berbasis **Next.js (App Router)** dan **React 19** untuk pla
 - [Arsitektur dan Struktur Direktori](#arsitektur-dan-struktur-direktori)
 - [Peta Rute dan Halaman Aplikasi](#peta-rute-dan-halaman-aplikasi)
 - [Peran dan Antarmuka Pengguna](#peran-dan-antarmuka-pengguna)
-- [Panduan Instalasi dan Menjalankan](#panduan-instalasi-dan-menjalankan)
-- [Variabel Lingkungan (.env)](#variabel-lingkungan-env)
-- [Integrasi API Backend](#integrasi-api-backend)
 - [Build dan Mode Produksi](#build-dan-mode-produksi)
-- [Lisensi](#lisensi)
 
 ---
 
