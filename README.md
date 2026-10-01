@@ -1,36 +1,159 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AksesKita — Web
 
-## Getting Started
+Web application for **AksesKita**, a public accessibility reporting platform that allows users to report accessibility issues in public spaces and enables administrators to manage and monitor submitted reports.
 
-First, run the development server:
+The application provides separate experiences for public users and administrators, with features for reporting issues, viewing report details, tracking status, managing categories, and monitoring accessibility reports.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Overview
+
+AksesKita Web is the frontend application of the AksesKita platform.
+
+It communicates with the AksesKita REST API to provide:
+
+* User authentication
+* Accessibility report submission
+* Report browsing and search
+* Report detail pages
+* Interactive maps
+* Report comments
+* Report status tracking
+* Report history
+* Admin dashboard
+* Category management
+* User management
+
+---
+
+## Tech Stack
+
+| Technology         | Purpose               |
+| ------------------ | --------------------- |
+| Next.js            | React framework       |
+| TypeScript         | Type-safe development |
+| Tailwind CSS       | Styling and UI        |
+| Leaflet            | Interactive maps      |
+| React Leaflet      | Leaflet integration   |
+| Axios              | API communication     |
+| JWT                | Authentication        |
+| Next.js App Router | Application routing   |
+
+---
+
+## Features
+
+### Public User
+
+Users can:
+
+* Register an account
+* Log in and log out
+* View accessibility reports
+* Search and filter reports
+* View report details
+* Submit new reports
+* Upload report images
+* Select report locations using a map
+* View report status
+* View report history
+* Add comments to reports
+
+---
+
+### Interactive Map
+
+AksesKita uses **OpenStreetMap and Leaflet** to display report locations.
+
+The map is used in several parts of the application, including:
+
+* Selecting a location when creating a report
+* Displaying report coordinates
+* Viewing the location of an accessibility issue
+* Showing geographical context for submitted reports
+
+Example flow:
+
+```text
+Open Report Form
+       ↓
+Select Location on Map
+       ↓
+Latitude & Longitude
+       ↓
+Submit Report
+       ↓
+Backend API
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Report Management
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Users can submit reports containing information such as:
 
-## Learn More
+```text
+Title
+Description
+Category
+Image
+Latitude
+Longitude
+```
 
-To learn more about Next.js, take a look at the following resources:
+Reports can be displayed with filtering, searching, and pagination depending on the page and user permissions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Report Status
 
-## Deploy on Vercel
+Users can monitor the progress of their reports through status updates.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Example workflow:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+Pending
+   ↓
+Reviewed
+   ↓
+In Progress
+   ↓
+Resolved
+```
+
+The frontend displays the current status as well as the report history returned by the backend.
+
+---
+
+### Comments
+
+Reports support comments for communication between users and administrators.
+
+The comment interface allows users to:
+
+* Read existing comments
+* Submit additional information
+* Follow updates related to their report
+
+---
+
+## Admin Dashboard
+
+Administrators have access to a dedicated dashboard for managing accessibility reports.
+
+The dashboard can provide:
+
+* Total report statistics
+* Report status statistics
+* Category statistics
+* Report lists
+* Report filtering
+* Report searching
+* Report detail management
+
+Example:
+
+```text
+┌─────────────────────────────────────────┐
+│              AD
+```
