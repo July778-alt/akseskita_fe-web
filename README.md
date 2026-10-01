@@ -160,66 +160,6 @@ Aplikasi menerapkan sistem pembagian hak akses (*Role-Based Access Control*) pad
 
 ---
 
-## Panduan Instalasi dan Menjalankan
-
-### 1. Prasyarat Sistem
-
-- **Node.js**: Versi `18.x` atau lebih baru
-- **NPM** atau package manager kompatibel (`pnpm` / `yarn`)
-- **Backend AksesKita**: Pastikan layanan API backend sudah berjalan (biasanya di `http://localhost:5000`)
-
-### 2. Kloning Repositori
-
-```bash
-git clone https://github.com/July778-alt/akseskita_fe-web.git
-cd akseskita_fe-web
-```
-
-### 3. Pasang Dependensi
-
-```bash
-npm install
-```
-
-### 4. Konfigurasi Variabel Lingkungan
-
-Salin berkas template `.env.example` menjadi `.env.local`:
-
-```bash
-cp .env.example .env.local
-```
-
-Pastikan `NEXT_PUBLIC_API_URL` mengarah ke alamat backend API Anda.
-
-### 5. Jalankan Server Development
-
-```bash
-npm run dev
-```
-
-Aplikasi web dapat diakses melalui peramban di: **`http://localhost:3000`**.
-
----
-
-## Variabel Lingkungan (.env)
-
-| Variabel                | Wajib | Nilai Contoh                  | Keterangan                                        |
-| ----------------------- | :---: | ----------------------------- | ------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL` |  Ya  | `http://localhost:5000/api` | Alamat endpoint dasar REST API backend Express.js |
-
----
-
-## Integrasi API Backend
-
-Komunikasi data antara frontend dan backend dikelola secara terpusat pada file `src/lib/api.ts`:
-
-- **Penyuntikan Token Otomatis**: Setiap permintaan HTTP yang keluar akan secara otomatis membaca token dari cookie `token` dan menyematkannya ke header `Authorization: Bearer <TOKEN>`.
-- **Dukungan Multipart Otomatis**: Apabila data yang dikirim bertipe `FormData`, header `Content-Type` otomatis diatur menjadi `multipart/form-data` untuk pengunggahan foto.
-- **Penanganan Kedaluwarsa Sesi (HTTP 401)**: Jika backend mengembalikan status 401 Unauthorized, token pada cookie dan localStorage akan langsung dibersihkan, lalu pengguna diarahkan kembali ke halaman login.
-- **Ekstraksi Respon (*Unwrapping*)**: Menggunakan helper fungsi `unwrap()` untuk mengekstraksi data muatan dari standar format respon `{ success: true, data: ... }`.
-
----
-
 ## Build dan Mode Produksi
 
 Untuk membangun aplikasi web ke dalam mode produksi:
@@ -241,10 +181,3 @@ npm start
 ```bash
 npm run lint
 ```
-
----
-
-## Lisensi
-
-Proyek ini dikembangkan sebagai bagian dari inisiatif portofolio rekayasa perangkat lunak (RPL) dan platform peningkatan aksesibilitas publik AksesKita.
-Didistribusikan di bawah lisensi [ISC](LICENSE).
