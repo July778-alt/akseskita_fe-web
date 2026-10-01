@@ -1,446 +1,258 @@
-# AksesKita — Web
+# AksesKita Frontend Web (Next.js Application)
 
-Web application for **AksesKita**, a public accessibility reporting platform that allows users to report accessibility issues in public spaces and enables administrators to manage and monitor submitted reports.
+[![Node.js](https://img.shields.io/badge/Node.js-18+-68a063?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.x-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.x-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06b6d4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![TanStack Query](https://img.shields.io/badge/TanStack_Query-v5-ff4154?style=for-the-badge&logo=react-query&logoColor=white)](https://tanstack.com/query)
+[![Leaflet](https://img.shields.io/badge/Leaflet-Maps-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com/)
 
-The application provides separate experiences for public users and administrators, with features for reporting issues, viewing report details, tracking status, managing categories, and monitoring accessibility reports.
-
----
-
-## Overview
-
-AksesKita Web is the frontend application of the AksesKita platform.
-
-It communicates with the AksesKita REST API to provide:
-
-* User authentication
-* Accessibility report submission
-* Report browsing and search
-* Report detail pages
-* Interactive maps
-* Report comments
-* Report status tracking
-* Report history
-* Admin dashboard
-* Category management
-* User management
+Aplikasi web modern berbasis **Next.js (App Router)** dan **React 19** untuk platform pelaporan aksesibilitas kota **AksesKita**. Aplikasi ini berfungsi sebagai antarmuka utama bagi masyarakat untuk melaporkan sarana publik yang rusak atau tidak ramah disabilitas, sekaligus sebagai pusat kendali (*staff dashboard*) bagi petugas/admin untuk memverifikasi dan memperbarui status laporan secara transparan.
 
 ---
 
-## Tech Stack
+## Daftar Isi
 
-| Technology         | Purpose               |
-| ------------------ | --------------------- |
-| Next.js            | React framework       |
-| TypeScript         | Type-safe development |
-| Tailwind CSS       | Styling and UI        |
-| Leaflet            | Interactive maps      |
-| React Leaflet      | Leaflet integration   |
-| Axios              | API communication     |
-| JWT                | Authentication        |
-| Next.js App Router | Application routing   |
-
----
-
-## Features
-
-### Public User
-
-Users can:
-
-* Register an account
-* Log in and log out
-* View accessibility reports
-* Search and filter reports
-* View report details
-* Submit new reports
-* Upload report images
-* Select report locations using a map
-* View report status
-* View report history
-* Add comments to reports
+- [Fitur Utama](#fitur-utama)
+- [Teknologi dan Dependensi](#teknologi-dan-dependensi)
+- [Arsitektur dan Struktur Direktori](#arsitektur-dan-struktur-direktori)
+- [Peta Rute dan Halaman Aplikasi](#peta-rute-dan-halaman-aplikasi)
+- [Peran dan Antarmuka Pengguna](#peran-dan-antarmuka-pengguna)
+- [Panduan Instalasi dan Menjalankan](#panduan-instalasi-dan-menjalankan)
+- [Variabel Lingkungan (.env)](#variabel-lingkungan-env)
+- [Integrasi API Backend](#integrasi-api-backend)
+- [Build dan Mode Produksi](#build-dan-mode-produksi)
+- [Lisensi](#lisensi)
 
 ---
 
-### Interactive Map
+## Fitur Utama
 
-AksesKita uses **OpenStreetMap and Leaflet** to display report locations.
+- **Landing Page & Feed Publik**:
+  - Halaman beranda modern dengan animasi visual menggunakan Framer Motion.
+  - Ringkasan statistik kota dan katalog laporan publik yang dapat dijelajahi tanpa login.
+- **Peta Interaktif Geospasial (Leaflet)**:
+  - Penandaan lokasi kerusakan fasilitas secara presisi dengan pin interaktif (`MapPicker`).
+  - Penampil peta detail koordinat laporan (`MapView`) berbasis OpenStreetMap.
+- **Formulir Pelaporan Ramah Pengguna**:
+  - Formulir komprehensif: judul, deskripsi, pemilihan kategori, pemilihan titik peta, alamat fisik, dan unggah foto bukti.
+  - Pratinjau gambar instan (*image preview*) sebelum pengiriman data.
+  - Dialog konfirmasi sebelum submit untuk mencegah kekeliruan data.
+  - Validasi formulir type-safe menggunakan React Hook Form dan Zod.
+- **Pelacakan Status & Timeline Histori**:
+  - Visualisasi alur tiket laporan (`pending` -> `verified` -> `in_progress` -> `resolved` / `rejected`).
+  - Komponen garis waktu kronologis (`StatusTimeline`) yang memuat rekam jejak petugas yang memverifikasi atau memperbarui tiket.
+- **Ruang Diskusi & Komentar Real-Time**:
+  - Kolom komunikasi langsung antara pelapor dan pihak verifikator pada setiap detail laporan.
+  - Hak penghapusan komentar bagi pemilik komentar.
+- **Pusat Notifikasi Interaktif (In-App Notifications)**:
+  - Dropdown notifikasi di navbar dengan indikator belum dibaca (*unread badge*).
+  - Aksi instan: tandai satu notifikasi telah dibaca, tandai semua dibaca, dan hapus riwayat notifikasi.
+- **Staff & Administrator Dashboard**:
+  - Ringkasan analitik utama: Total Laporan, Butuh Verifikasi, Kasus Selesai, dan Jumlah Warga Terdaftar.
+  - Diagram visual pertumbuhan bulanan (*Monthly Growth*) dan kategori masalah terpopuler (*Hot Topics*).
+  - Tabel manajemen laporan untuk meninjau bukti, menolak laporan tidak valid, atau memperbarui progres perbaikan.
+  - Manajemen master data kategori fasilitas publik (tambah, edit, hapus).
+  - Manajemen akun pengguna dan alih peran (*role assignment*) khusus Super Admin.
+- **Pengelolaan Profil**:
+  - Pembaruan nama lengkap dan unggah foto profil (avatar) pengguna.
+- **Arsitektur State Management & Keamanan**:
+  - Pemisahan server state menggunakan TanStack Query v5 (caching otomatis, revalidasi, dan mutasi optimistik).
+  - Client authentication session state dikelola dengan Zustand dan disimpan secara aman di HTTP cookies (`js-cookie`).
+  - Proteksi rute (`AuthGuard`) dan penanganan sesi kedaluwarsa secara otomatis melalui Axios interceptor (HTTP 401 redirect).
 
-The map is used in several parts of the application, including:
+---
 
-* Selecting a location when creating a report
-* Displaying report coordinates
-* Viewing the location of an accessibility issue
-* Showing geographical context for submitted reports
+## Teknologi dan Dependensi
 
-Example flow:
+| Kategori                      | Teknologi                                                                           | Deskripsi                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **Framework**           | [Next.js 16](https://nextjs.org/)                                                    | Framework React generasi terbaru dengan App Router              |
+| **Core Library**        | [React 19](https://react.dev/)                                                       | Library UI modern dengan performa rendering optimal             |
+| **Bahasa**              | [TypeScript 5](https://www.typescriptlang.org/)                                      | Penulisan kode type-safe secara end-to-end                      |
+| **Styling**             | [Tailwind CSS v4](https://tailwindcss.com/)                                          | Engine utility-first CSS generasi terbaru                       |
+| **Server State**        | [TanStack React Query v5](https://tanstack.com/query)                                | Manajemen cache, data fetching, dan mutasi API                  |
+| **Client State**        | [Zustand v5](https://github.com/pmndrs/zustand)                                      | Global state lightweight untuk sesi autentikasi                 |
+| **Peta Digital**        | [Leaflet](https://leafletjs.com/) & [React-Leaflet](https://react-leaflet.js.org/)    | Peta interaktif OpenStreetMap untuk geolokasi fasilitas         |
+| **Formulir & Validasi** | [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)             | Penanganan input form performa tinggi dan validasi skema        |
+| **HTTP Client**         | [Axios](https://axios-http.com/)                                                     | Permintaan HTTP terpusat dengan interceptor token dan error 401 |
+| **Animasi & Ikon**      | [Framer Motion](https://www.framer.com/motion/) & [Lucide React](https://lucide.dev/) | Transisi halaman halus dan kumpulan ikon modern                 |
+| **Notifikasi Toast**    | [Sonner](https://sonner.emilkowal.ski/)                                              | Komponen alert/toast modern                                     |
+
+---
+
+## Arsitektur dan Struktur Direktori
+
+Proyek ini dibangun menggunakan **arsitektur modular berbasis fitur** (*Feature-driven Architecture*), mengelompokkan logika bisnis, komponen UI, query cache, dan skema validasi berdasarkan domain modul:
 
 ```text
-Open Report Form
-       ↓
-Select Location on Map
-       ↓
-Latitude & Longitude
-       ↓
-Submit Report
-       ↓
-Backend API
+akseskita_fe-web/
+├── src/
+│   ├── app/                      # Rute App Router Next.js
+│   │   ├── (auth)/               # Grup rute autentikasi
+│   │   │   ├── login/            # Halaman masuk (/login)
+│   │   │   └── register/         # Halaman pendaftaran (/register)
+│   │   ├── (dashboard)/          # Antarmuka pengguna publik/warga
+│   │   │   ├── profile/          # Pengaturan profil akun (/profile)
+│   │   │   └── reports/          # Laporan pengguna (/reports, /reports/create, /reports/[id])
+│   │   ├── (public)/             # Halaman eksplorasi publik (/reports publik)
+│   │   ├── staff-dashboard/      # Portal panel kendali petugas & admin
+│   │   │   ├── categories/       # Kelola master data kategori (/staff-dashboard/categories)
+│   │   │   ├── dashboard/        # Metrik dan analitik sistem (/staff-dashboard/dashboard)
+│   │   │   ├── reports/          # Tinjauan tiket laporan (/staff-dashboard/reports)
+│   │   │   └── users/            # Manajemen pengguna (/staff-dashboard/users)
+│   │   ├── globals.css           # Konfigurasi Tailwind CSS v4
+│   │   ├── layout.tsx            # Root layout aplikasi & provider wrapper
+│   │   └── page.tsx              # Landing page utama
+│   ├── components/               # Komponen UI bersama
+│   │   ├── shared/               # Komponen lintas modul (AuthGuard, DataTable, FileUploader, Layout)
+│   │   └── ui/                   # Komponen atomik (Button, Input, Card, Modal, Table, Badge, dll)
+│   ├── constants/                # Nilai konstanta aplikasi
+│   ├── features/                 # Logika bisnis modular per domain
+│   │   ├── auth/                 # Service, Zustand store, dan tipe autentikasi
+│   │   ├── categories/           # Query dan service kategori fasilitas
+│   │   ├── comments/             # Komponen diskusi dan mutasi komentar
+│   │   ├── dashboard/            # Kartu analitik dan query metrik statistik
+│   │   ├── maps/                 # Komponen MapPicker dan MapView Leaflet
+│   │   ├── notifications/        # Komponen dropdown notifikasi dan query
+│   │   ├── reports/              # Komponen form laporan, card, timeline, dan query/mutasi
+│   │   └── users/                # Layanan pengelolaan profil dan hak akses pengguna
+│   ├── hooks/                    # Custom React hooks bersama
+│   ├── lib/                      # Konfigurasi library (Axios instance, env, logger, utils)
+│   ├── providers/                # React context providers (TanStack Query Client Provider, Toaster)
+│   └── types/                    # Definisi antarmuka TypeScript global (API Response, Report, User)
+├── public/                       # Berkas aset statis
+├── next.config.ts                # Konfigurasi Next.js
+├── package.json                  # Dependensi dan skrip proyek
+├── tsconfig.json                 # Konfigurasi TypeScript
+└── .env.example                  # Template variabel lingkungan
 ```
 
 ---
 
-### Report Management
+## Peta Rute dan Halaman Aplikasi
 
-Users can submit reports containing information such as:
-
-```text
-Title
-Description
-Category
-Image
-Latitude
-Longitude
-```
-
-Reports can be displayed with filtering, searching, and pagination depending on the page and user permissions.
-
----
-
-### Report Status
-
-Users can monitor the progress of their reports through status updates.
-
-Example workflow:
-
-```text
-Pending
-   ↓
-Reviewed
-   ↓
-In Progress
-   ↓
-Resolved
-```
-
-The frontend displays the current status as well as the report history returned by the backend.
+| Jalur URL                       | Akses                | Deskripsi                                                                     |
+| ------------------------------- | -------------------- | ----------------------------------------------------------------------------- |
+| `/`                           | Publik               | Beranda utama / landing page aplikasi                                         |
+| `/login`                      | Publik               | Halaman masuk akun                                                            |
+| `/register`                   | Publik               | Halaman registrasi warga baru                                                 |
+| `/reports`                    | Publik / User        | Katalog laporan masyarakat dengan pencarian dan filter                        |
+| `/reports/create`             | Terotentikasi (User) | Halaman pembuatan tiket laporan fasilitas baru                                |
+| `/reports/:id`                | Publik / User        | Detail laporan lengkap, peta koordinat, timeline status, dan kolom diskusi    |
+| `/profile`                    | Terotentikasi        | Pengaturan akun dan pembaruan foto profil                                     |
+| `/staff-dashboard/dashboard`  | Admin, Super Admin   | Ikhtisar statistik, grafik pertumbuhan bulanan, dan kategori laporan teratas  |
+| `/staff-dashboard/reports`    | Admin, Super Admin   | Manajemen status tiket laporan (verifikasi, proses pengerjaan, penyelesaian)  |
+| `/staff-dashboard/categories` | Admin, Super Admin   | Kelola data kategori fasilitas publik (CRUD)                                  |
+| `/staff-dashboard/users`      | Super Admin          | Manajemen akun pengguna dan alih peran (*user*, *admin*, *super_admin*) |
 
 ---
 
-### Comments
+## Peran dan Antarmuka Pengguna
 
-Reports support comments for communication between users and administrators.
+Aplikasi menerapkan sistem pembagian hak akses (*Role-Based Access Control*) pada tampilan antarmuka:
 
-The comment interface allows users to:
-
-* Read existing comments
-* Submit additional information
-* Follow updates related to their report
-
----
-
-## Admin Dashboard
-
-Administrators have access to a dedicated dashboard for managing accessibility reports.
-
-The dashboard can provide:
-
-* Total report statistics
-* Report status statistics
-* Category statistics
-* Report lists
-* Report filtering
-* Report searching
-* Report detail management
-
-Example:
-
-```text
-┌─────────────────────────────────────────┐
-│              ADMIN DASHBOARD             │
-├───────────┬───────────┬─────────────────┤
-│  Reports  │  Pending  │    Resolved     │
-│    120    │    32     │       64        │
-└───────────┴───────────┴─────────────────┘
-```
+| Halaman / Fitur               | Tamu (Publik) | User (Warga) | Admin (Petugas) | Super Admin |
+| ----------------------------- | :-----------: | :----------: | :-------------: | :---------: |
+| Melihat Landing Page          |      Ya      |      Ya      |       Ya       |     Ya     |
+| Menjelajahi Laporan Publik    |      Ya      |      Ya      |       Ya       |     Ya     |
+| Membuat Tiket Laporan Baru    |     Tidak     |      Ya      |       Ya       |     Ya     |
+| Menulis Komentar Diskusi      |     Tidak     |      Ya      |       Ya       |     Ya     |
+| Mengakses Dropdown Notifikasi |     Tidak     |      Ya      |       Ya       |     Ya     |
+| Mengubah Profil Sendiri       |     Tidak     |      Ya      |       Ya       |     Ya     |
+| Mengakses Staff Dashboard     |     Tidak     |    Tidak    |       Ya       |     Ya     |
+| Memperbarui Status Tiket      |     Tidak     |    Tidak    |       Ya       |     Ya     |
+| Mengelola Kategori Fasilitas  |     Tidak     |    Tidak    |       Ya       |     Ya     |
+| Mengelola Role Pengguna       |     Tidak     |    Tidak    |      Tidak      |     Ya     |
 
 ---
 
-## Role-Based Interface
+## Panduan Instalasi dan Menjalankan
 
-The application provides different interfaces depending on the authenticated user's role.
+### 1. Prasyarat Sistem
 
-```text
-                         Login
-                           │
-                           ▼
-                    Authentication
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-           Public                    Admin
-              │                         │
-              ▼                         ▼
-        User Dashboard            Admin Dashboard
-              │                         │
-        Own Reports               All Reports
-        Create Report             Manage Reports
-        Comments                   Categories
-        History                    Statistics
-                                      │
-                                      ▼
-                                Superadmin
-                                      │
-                              User Management
-                              Role Management
-```
+- **Node.js**: Versi `18.x` atau lebih baru
+- **NPM** atau package manager kompatibel (`pnpm` / `yarn`)
+- **Backend AksesKita**: Pastikan layanan API backend sudah berjalan (biasanya di `http://localhost:5000`)
 
----
-
-## Application Structure
-
-```text
-akses_kita_fe_web/
-├── app/
-│   ├── (auth)/
-│   │   ├── login/
-│   │   └── register/
-│   │
-│   ├── dashboard/
-│   │   ├── page.tsx
-│   │   ├── reports/
-│   │   └── profile/
-│   │
-│   ├── reports/
-│   │   ├── page.tsx
-│   │   ├── create/
-│   │   └── [id]/
-│   │
-│   ├── admin/
-│   │   ├── dashboard/
-│   │   ├── reports/
-│   │   ├── categories/
-│   │   └── users/
-│   │
-│   ├── layout.tsx
-│   └── page.tsx
-│
-├── components/
-│   ├── ui/
-│   ├── layout/
-│   ├── reports/
-│   ├── map/
-│   └── dashboard/
-│
-├── lib/
-│   ├── api.ts
-│   ├── auth.ts
-│   └── utils.ts
-│
-├── services/
-│   ├── auth.service.ts
-│   ├── report.service.ts
-│   ├── category.service.ts
-│   └── user.service.ts
-│
-├── types/
-│   └── index.ts
-│
-├── public/
-│
-├── .env.example
-├── next.config.ts
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
-> The exact folder structure may differ depending on the current implementation.
-
----
-
-## Requirements
-
-Make sure the following are installed:
-
-* Node.js
-* npm
-* Git
-
-The application also requires the **AksesKita Backend API** to be running.
-
----
-
-## Installation
-
-Clone the repository:
+### 2. Kloning Repositori
 
 ```bash
-git clone <repository-url>
-cd akses_kita_fe_web
+git clone https://github.com/July778-alt/akseskita_fe-web.git
+cd akseskita_fe-web
 ```
 
-Install dependencies:
+### 3. Pasang Dependensi
 
 ```bash
 npm install
 ```
 
----
+### 4. Konfigurasi Variabel Lingkungan
 
-## Environment Variables
+Salin berkas template `.env.example` menjadi `.env.local`:
 
-Create a `.env.local` file:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```bash
+cp .env.example .env.local
 ```
 
-The API URL should point to the running AksesKita backend.
+Pastikan `NEXT_PUBLIC_API_URL` mengarah ke alamat backend API Anda.
 
----
-
-## Running the Development Server
-
-Start the development server:
+### 5. Jalankan Server Development
 
 ```bash
 npm run dev
 ```
 
-The application will be available at:
-
-```text
-http://localhost:3000
-```
+Aplikasi web dapat diakses melalui peramban di: **`http://localhost:3000`**.
 
 ---
 
-## Production Build
+## Variabel Lingkungan (.env)
 
-Create a production build:
+| Variabel                | Wajib | Nilai Contoh                  | Keterangan                                        |
+| ----------------------- | :---: | ----------------------------- | ------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL` |  Ya  | `http://localhost:5000/api` | Alamat endpoint dasar REST API backend Express.js |
+
+---
+
+## Integrasi API Backend
+
+Komunikasi data antara frontend dan backend dikelola secara terpusat pada file `src/lib/api.ts`:
+
+- **Penyuntikan Token Otomatis**: Setiap permintaan HTTP yang keluar akan secara otomatis membaca token dari cookie `token` dan menyematkannya ke header `Authorization: Bearer <TOKEN>`.
+- **Dukungan Multipart Otomatis**: Apabila data yang dikirim bertipe `FormData`, header `Content-Type` otomatis diatur menjadi `multipart/form-data` untuk pengunggahan foto.
+- **Penanganan Kedaluwarsa Sesi (HTTP 401)**: Jika backend mengembalikan status 401 Unauthorized, token pada cookie dan localStorage akan langsung dibersihkan, lalu pengguna diarahkan kembali ke halaman login.
+- **Ekstraksi Respon (*Unwrapping*)**: Menggunakan helper fungsi `unwrap()` untuk mengekstraksi data muatan dari standar format respon `{ success: true, data: ... }`.
+
+---
+
+## Build dan Mode Produksi
+
+Untuk membangun aplikasi web ke dalam mode produksi:
+
+### 1. Kompilasi Proyek
 
 ```bash
 npm run build
 ```
 
-Run the production server:
+### 2. Menjalankan Server Produksi
 
 ```bash
 npm start
 ```
 
----
+### 3. Pemeriksaan Kualitas Kode (Linting)
 
-## API Integration
-
-The frontend communicates with the backend through REST API endpoints.
-
-Example:
-
-```text
-Frontend
-   │
-   │ HTTP Request
-   ▼
-AksesKita Backend
-   │
-   ▼
-PostgreSQL
-```
-
-Example API request:
-
-```ts
-const response = await api.get("/reports");
-```
-
-Authenticated requests include the user's JWT token:
-
-```http
-Authorization: Bearer <JWT_TOKEN>
+```bash
+npm run lint
 ```
 
 ---
 
-## Design Approach
+## Lisensi
 
-The interface focuses on a clean and accessible user experience.
-
-The frontend is designed around:
-
-* Clear navigation
-* Responsive layouts
-* Simple report submission
-* Readable report information
-* Location-based reporting
-* Role-based interfaces
-* Consistent UI components
-
-The application is intended to be usable across desktop and mobile-sized screens.
-
----
-
-## Related Projects
-
-### AksesKita Backend
-
-REST API responsible for authentication, report management, comments, categories, dashboard statistics, and database operations.
-
-```text
-Express.js
-TypeScript
-PostgreSQL
-```
-
-### AksesKita Mobile
-
-Mobile client for submitting and monitoring accessibility reports.
-
-```text
-React Native
-Expo
-```
-
----
-
-## Development Flow
-
-```text
-                 ┌───────────────────┐
-                 │    AksesKita Web  │
-                 │     Next.js       │
-                 └─────────┬─────────┘
-                           │
-                           │ REST API
-                           ▼
-                 ┌───────────────────┐
-                 │ AksesKita Backend │
-                 │    Express.js     │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │    PostgreSQL     │
-                 └───────────────────┘
-```
-
----
-
-## Project Goal
-
-AksesKita aims to provide a platform for documenting accessibility problems in public spaces.
-
-Through the web application, users can report issues while administrators can review reports, manage their status, and monitor submitted accessibility problems.
-
----
-
-## Author
-
-**Radit**
-
-RPL Student & Frontend Developer
-
----
-
-## License
-
-This project was created as a school project and learning portfolio.
+Proyek ini dikembangkan sebagai bagian dari inisiatif portofolio rekayasa perangkat lunak (RPL) dan platform peningkatan aksesibilitas publik AksesKita.
+Didistribusikan di bawah lisensi [ISC](LICENSE).
