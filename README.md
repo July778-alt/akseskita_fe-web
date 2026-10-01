@@ -1,13 +1,5 @@
 # AksesKita Frontend Web (Next.js Application)
 
-[![Node.js](https://img.shields.io/badge/Node.js-18+-68a063?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.x-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.x-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06b6d4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![TanStack Query](https://img.shields.io/badge/TanStack_Query-v5-ff4154?style=for-the-badge&logo=react-query&logoColor=white)](https://tanstack.com/query)
-[![Leaflet](https://img.shields.io/badge/Leaflet-Maps-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com/)
-
 Aplikasi web modern berbasis **Next.js (App Router)** dan **React 19** untuk platform pelaporan aksesibilitas kota **AksesKita**. Aplikasi ini berfungsi sebagai antarmuka utama bagi masyarakat untuk melaporkan sarana publik yang rusak atau tidak ramah disabilitas, sekaligus sebagai pusat kendali (*staff dashboard*) bagi petugas/admin untuk memverifikasi dan memperbarui status laporan secara transparan.
 
 ---
